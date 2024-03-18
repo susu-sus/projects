@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+  this is the cart
+{% endblock %}
+{% block title %}
+    Search
+{% endblock %}
+{% block content %}
+{% if not cart_items %}
+<head>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<div>
+    <div class="text-center">
+        <br>
+        <h1 class="text-center my_title">
+            Your Shopping Cart is empty
+        </h1>
+        <br>
+        <p class="text-center"></p>
+        Please Click <a href="{% url 'EcommerseApp:allProdCart' %}">Here</a>to continue shopping.
+</p>
+
+
+    </div>
+</div>
+{% else %}
+<div>
+    <div class="text-center">
+        <br>
+        <h1 class="text-center my_title">
+            Your Shopping cart
+        </h1>
+        <br>
+    </div>
+    <div class="row mx-auto">
+<div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+    <table class="table my_custom_table">
+<thead class="my_custom_thead">
+<tr>
+<th colspan="5">
+    Your Items
+</th>
+</tr>
+</thead>
+        <tbody>
+        {% for cart_item in cart_items %}
+        <tr>
+            <td>
+                <a href="cart_item.product.get_absolute_url"><img src="{{cart_item.product.image.url}}" alt="" class="float-left rounded custom_image"></a>
+            </td>
+            <td class="text-lef">
+                {{cart_item.product.name}}
+                <br>
+                SKU:{{cart_item.product.id}}
+                <br>
+                Price: INR {{cart_item.product.price}}
+                <br>
+                Qty : {{cart_item.quantity}} x {{cart_item}}
+
+            </td>
+            <td>
+                INR {{cart_item.sub_total}}
+            </td>
+            {% if cart_item.quantity < cart_item.product.stock %}
+            <td>
+                <a href="{% url 'cart:add_cart' cart_item.product.id %}">Add</a><br>
+                    &nbsp;&nbsp;<a href="{% url 'cart:cart_remove' cart_item.product.id %}">Remove</a><br>
+                    &nbsp;&nbsp;<a href="{% url 'cart:full_remove' cart_item.product.id %}">Delete</a>
+            </td>
+            {% else %}
+            <td>
+
+                    &nbsp;<a href="{% url 'cart:cart_remove' cart_item.product.id %}">Remove</a><br>
+                    &nbsp;&nbsp;<a href="{% url 'cart:full_remove' cart_item.product.id %}">Delete</a>
+            </td>
+
+        </tr>
+         {% endif %}
+
+        </tbody>
+        {% endfor %}
+    </table>
+
+</div>
+   <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+       <table class="table my_custom_table">
+           <thead class="my_custom_thead">
+           <tr>
+               <th>
+                   Checkout
+               </th>
+           </tr>
+           </thead>
+           <tbody>
+           <tr>
+               <td>
+                   Please review your shopping cart before proceeding with order payment.
+               </td>
+           </tr>
+           <tr>
+               <td class="text-left">
+                   Your Cart Total is : <strong>{{ total }}</strong>
+
+               </td>
+           </tr>
+           </tbody>
+
+       </table>
+       <div class="mx-auto">
+           <a href="{% url 'EcommerseApp:allProdCat' %}" class="btn btn-secondary btn-block my_custom_button">Continue shopping</a>
+<br>
+           <br>
+
+
+    </div>
+        <div>
+
+          <a href="/App/">
+              <button class="btn btn-secondary btn-block" style="background-color:#87CEEB;">Payment</button>
+            </a>
+
+    </div>
+    {% endif %}
+   </div>
+    </div>
+</div>
+{% endblock %}
